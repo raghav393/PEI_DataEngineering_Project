@@ -1,0 +1,52 @@
+{
+  "sources": [
+    {
+      "name": "Products",
+      "format": "csv",
+      "filename": "abfss://raw@dbinterviewvivek1.dfs.core.windows.net/product/Products.csv",
+      "bronze_write": {
+        "mode":"overwrite",
+        "format":"delta",
+        "table_name":"dbcatalog.dbbronze.products",
+        "external_location":"abfss://bronze@dbinterviewvivek1.dfs.core.windows.net/products"
+      },
+      "options": {
+        "header": "True",
+        "inferSchema": "True",
+        "quote": "\"",
+		"escape": "\""
+      }
+    },
+    {
+      "name": "Orders",
+      "format": "json",
+      "filename": "abfss://raw@dbinterviewvivek1.dfs.core.windows.net/order/Orders.json",
+      "bronze_write": {
+        "mode":"overwrite",
+        "format":"delta",
+        "table_name":"dbcatalog.dbbronze.orders",
+        "external_location":"abfss://bronze@dbinterviewvivek1.dfs.core.windows.net/order"
+      },
+      "options": {
+        "multiline": "True",
+        "inferSchema": "True"
+      }
+    },
+    {
+      "name": "Customer",
+      "format": "com.crealytics.spark.excel",
+      "filename": "abfss://raw@dbinterviewvivek1.dfs.core.windows.net/customer/Customer.xlsx",
+      "bronze_write": {
+        "mode":"overwrite",
+        "format":"delta",
+        "table_name":"dbcatalog.dbbronze.customer",
+        "external_location":"abfss://bronze@dbinterviewvivek1.dfs.core.windows.net/customers"
+      },
+      "options": {
+        "header": "True",
+        "inferSchema": "True",
+        "dataAddress": "Worksheet"
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+    "customers": {
+        "filters": {
+            "Customer_Name": [
+                "regex:^[\\p{L}]+( [\\p{L}]+)*$",
+                "not_empty",
+                "not_null"
+            ],
+            "Customer_ID": ["not_null", "not_empty"]
+        },
+        "dedup_key": "Customer_ID"
+    },
+    "products": {
+        "filters": {
+            "Product_ID": ["not_null", "not_empty"]
+        },
+        "dedup_key": "Product_ID"
+    },
+    "orders": {
+        "filters": {
+            "Order_ID": ["not_null", "not_empty"]
+        },
+        "dedup_key": "Order_ID"
+    }
+}
