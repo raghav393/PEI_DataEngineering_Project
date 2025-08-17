@@ -18,17 +18,20 @@ class data_ingest:
     
     #Function to import values from configuration file
     def import_config(self,name):
-        source=self.sources.get(name)
-        if not source:
-            raise ValueError(f"Source '{name}' not found in config.")
+        try:
+            source=self.sources.get(name)
+            if not source:
+                raise ValueError(f"Source '{name}' not found in config.")
 
-        filename=source["filename"]
-        filetype=source["format"]
-        bronze_write=source["bronze_write"]
-        bronze_write_options={k: v for k, v in bronze_write.asDict().items() if v is not None}
-        options_read=source["options"]
-        options = {k: v for k, v in options_read.asDict().items() if v is not None}
-        return {"filename":filename,"filetype":filetype,"bronze_write_options":bronze_write_options,"options":options}
+            filename=source["filename"]
+            filetype=source["format"]
+            bronze_write=source["bronze_write"]
+            bronze_write_options={k: v for k, v in bronze_write.asDict().items() if v is not None}
+            options_read=source["options"]
+            options = {k: v for k, v in options_read.asDict().items() if v is not None}
+            return {"filename":filename,"filetype":filetype,"bronze_write_options":bronze_write_options,"options":options}
+        except Exception as e:
+            raise ValueError(f"Values could not be imported from config file and failed with error {e}")
     
     #Funnction which will perform schema evolution
     def schema_evolution(self,df,schema):
@@ -94,38 +97,47 @@ import json
 
 #Function which will dynamically generate rules using configuration file for cleansing
 def cleanse_dataframe(df, rules: Dict[str, Any]):
-    for column, conditions in rules.get("filters", {}).items():
-        for cond in conditions:
-            if cond == "not_null":
-                df = df.filter(col(column).isNotNull())
-            elif cond == "not_empty":
-                df = df.filter(col(column) != "")
-            elif cond.startswith("regex:"):
-                pattern = cond.split("regex:")[1]
-                df = df.filter(col(column).rlike(pattern))
-    if "dedup_key" in rules:
-        df = df.dropDuplicates([rules["dedup_key"]])
-    return df
+    try:
+        for column, conditions in rules.get("filters", {}).items():
+            for cond in conditions:
+                if cond == "not_null":
+                    df = df.filter(col(column).isNotNull())
+                elif cond == "not_empty":
+                    df = df.filter(col(column) != "")
+                elif cond.startswith("regex:"):
+                    pattern = cond.split("regex:")[1]
+                    df = df.filter(col(column).rlike(pattern))
+        if "dedup_key" in rules:
+            df = df.dropDuplicates([rules["dedup_key"]])
+        return df
+    except Exception as e:
+        raise ValueError(f"Dataframe cleansing failed and failed with error {e}")
 
 #Function will call cleansing_dataframe fuction and run cleansing operations
 def cleansing(dataframes: Dict[str, Any], config: Dict[str, Any]) -> Dict[str, Any]:
-    cleansed = {}
-    for name, df in dataframes.items():
-        rules = config.get(name, {})
-        cleansed[name] = cleanse_dataframe(df, rules)
-    return cleansed
+    try:
+        cleansed = {}
+        for name, df in dataframes.items():
+            rules = config.get(name, {})
+            cleansed[name] = cleanse_dataframe(df, rules)
+        return cleansed
+    except Exception as e:
+        raise ValueError(f"Dataframe cleansing failed and failed with error {e}")
 
 # COMMAND ----------
 #Function to load rules configuration file
 def load_config_from_adls(config_path: str,spark) -> Dict[str, Any]:
-    # Read the config file as text from ADLS
-    lines = spark.read.text(config_path).rdd.map(lambda r: r[0]).collect()
-    
-    # Join all lines to rebuild the full JSON string
-    json_str = "\n".join(lines)
-    
-    # Parse into Python dictionary
-    return json.loads(json_str)
+    try:
+        # Read the config file as text from ADLS
+        lines = spark.read.text(config_path).rdd.map(lambda r: r[0]).collect()
+        
+        # Join all lines to rebuild the full JSON string
+        json_str = "\n".join(lines)
+        
+        # Parse into Python dictionary
+        return json.loads(json_str)
+    except Exception as e:
+        raise ValueError(f"Config file could not be loaded and failed with error {e}")
 
 
 
