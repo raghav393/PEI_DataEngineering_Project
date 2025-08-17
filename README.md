@@ -2,6 +2,7 @@
 1. Since the KPI's requested are on yearly basis, hence considered data has to be processed in batch, means "BATCH PROCESSING" has to be done
 2. Data model adopted is "Star Schema", where "ORDERS" is Fact Table & "CUSTOMER","PRODUCTS" are dimension tables
 3. Files land on Azure cloud. Hence created external location in Databricks mounted
+4. Data is a full refresh
 
 #Approach Followed:
 1. Followed Medallion Architecture-> Bronze, Silver, Gold
