@@ -15,10 +15,13 @@ from shared.utils import *
 
 #Function to read data from source files in Azure Cloud
 def read_data(job_parameters):
-    df_products=data_ingest("abfss://config@dbinterviewvivek1.dfs.core.windows.net/config.json",spark).read_data(job_parameters["products_source"])
-    df_orders=data_ingest("abfss://config@dbinterviewvivek1.dfs.core.windows.net/config.json",spark).read_data(job_parameters["orders_source"])
-    df_customers=data_ingest("abfss://config@dbinterviewvivek1.dfs.core.windows.net/config.json",spark).read_data(job_parameters["customer_source"])
-    return {"products":df_products,"orders":df_orders,"customer":df_customers}
+    try:
+        df_products=data_ingest("abfss://config@dbinterviewvivek1.dfs.core.windows.net/config.json",spark).read_data(job_parameters["products_source"])
+        df_orders=data_ingest("abfss://config@dbinterviewvivek1.dfs.core.windows.net/config.json",spark).read_data(job_parameters["orders_source"])
+        df_customers=data_ingest("abfss://config@dbinterviewvivek1.dfs.core.windows.net/config.json",spark).read_data(job_parameters["customer_source"])
+        return {"products":df_products,"orders":df_orders,"customer":df_customers}
+    except Exception as e:
+        raise FileNotFoundError(f"Data could not be read and failed with error {e}")
 
 #Function to perform Schema Evolution
 def evolve_schema(read_data,schemas):
