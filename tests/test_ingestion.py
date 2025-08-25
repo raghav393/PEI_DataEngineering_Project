@@ -72,7 +72,7 @@ def test_schema_evolution_from_columns(samplecolumns, filename="products"):
         assert sorted(evolved_df.columns) == sorted(expected_columns), \
             f"Test case {idx + 1} failed: expected {expected_columns}, got {evolved_df.columns}"
         
-        print(f"✅ Test case {idx + 1} passed.")
+        print(f"Test case {idx + 1} passed.")
 
 @pytest.fixture
 def sampledataset():
@@ -106,4 +106,4 @@ def test_cleansing_columns(sampledataset, filename="products"):
         assert sorted(evolved_df.columns) == sorted(expected_columns), \
             f"Test case {idx + 1} failed: expected {expected_columns}, got {evolved_df.columns}"
         
-        print(f"✅ Test case {idx + 1} passed: expected {expected_columns}, present {evolved_df.columns}")
+        print(f"Test case {idx + 1} passed: expected {expected_columns}, present {evolved_df.columns}")
