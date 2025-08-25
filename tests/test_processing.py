@@ -22,7 +22,7 @@ gold = importlib.util.module_from_spec(spec)
 try:
     spec.loader.exec_module(gold)
 except Exception as e:
-    print("❌ Failed to load data_processing.py:", e)
+    print("Failed to load data_processing.py:", e)
 
 spark = get_spark()
 
@@ -62,5 +62,5 @@ def test_aggregation(sample_dataset):
     df_expected_select=df_expected.select("Category","Sub_Category","Customer_ID","Order_year","Total_Profit")
     assert sorted(df_agg_test.collect())==sorted(df_expected_select.collect()),\
         f"Test case 2 failed: expected {df_agg_test.collect()}, got #{df_expected_select.collect()}"
-    print(f"✅ Test case passed. Expected {df_expected_select.collect()}, present {df_agg_test.collect()} ")
+    print(f"Test case passed. Expected {df_expected_select.collect()}, present {df_agg_test.collect()} ")
 
