@@ -26,7 +26,7 @@ utils = importlib.util.module_from_spec(spec)
 try:
     spec.loader.exec_module(utils)
 except Exception as e:
-    print("❌ Failed to load utils.py:", e)
+    print("Failed to load utils.py:", e)
 
 #Setting the silver directory path
 src_path = os.path.join(repo_root, "src", "silver","data_cleansing.py")
@@ -36,7 +36,7 @@ silver = importlib.util.module_from_spec(spec)
 try:
     spec.loader.exec_module(silver)
 except Exception as e:
-    print("❌ Failed to load data_cleansing.py:", e)
+    print("Failed to load data_cleansing.py:", e)
 
 #Getting the spark session
 spark = get_spark()
@@ -114,10 +114,10 @@ def test_cleansing_from_columns(sampledataset):
         # Validate column alignment
         assert sorted(df_products_cleansed.collect()) == sorted(df_expected_products.collect()), \
             f"Test case 1 failed: expected {df_products_cleansed.collect()}, got {df_expected_products.collect()}"
-        print(f"✅ Test case 1 passed. Expected {df_expected_products.collect()}, present {df_products_cleansed.collect()} ")
+        print(f"Test case 1 passed. Expected {df_expected_products.collect()}, present {df_products_cleansed.collect()} ")
         assert sorted(df_customers_cleansed.collect()) == sorted(df_expected_customer.collect()), \
             f"Test case 2 failed: expected {df_customers_cleansed.collect()}, got #{df_expected_customer.collect()}"
-        print(f"✅ Test case 2 passed. Expected {df_expected_customer.collect()}, present {df_customers_cleansed.collect()} ")
+        print(f"Test case 2 passed. Expected {df_expected_customer.collect()}, present {df_customers_cleansed.collect()} ")
         assert sorted(df_orders_final_cleansed.collect()) == sorted(df_expected_orders.collect()), \
             f"Test case 3 failed: expected {df_orders_final_cleansed.collect()}, got {df_expected_orders.collect()}"
-        print(f"✅ Test case 3 passed. Expected {df_expected_orders.collect()}, present {df_orders_final_cleansed.collect()} ")
+        print(f"Test case 3 passed. Expected {df_expected_orders.collect()}, present {df_orders_final_cleansed.collect()} ")
