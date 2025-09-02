@@ -24,7 +24,7 @@ utils = importlib.util.module_from_spec(spec)
 try:
     spec.loader.exec_module(utils)
 except Exception as e:
-    print("❌ Failed to load utils.py:", e)
+    print("Failed to load utils.py:", e)
 
 spark = get_spark()
 
